@@ -119,7 +119,27 @@ export const AccordionContent = React.forwardRef(
 export const AccordionUI = (props) => {
     function traverse(node, index) {
         var ix = -1
+        function getAnchorText(mynode) {
+            console.log("Searching anchor text")
+            // Brings the innter text of first
+            let text = null
+            if (mynode && mynode.children) {
+                const anchor = mynode?.children?.find((x) => x.name === "a")
+                if (anchor) {
+                    text = anchor?.children[0]?.data
+                    console.log("anchor found", anchor.children[0].data)
+                    return anchor.children[0].data
+                } else {
+                    for (let i = 0; i < mynode.children.length; i++) {
+                        const c = mynode.children[i]
+                        const ch = getAnchorText(c)
+                        if (ch && ch.length) return ch
+                    }
+                }
+            }
+        }
         function recurse(domNode) {
+            console.log("DOMNODE: ", domNode.name)
             if (
                 !domNode.children ||
                 domNode.children.length === 0 ||
@@ -135,21 +155,31 @@ export const AccordionUI = (props) => {
                     )
                 } else return <div>{domNode.data}</div>
             } else if (domNode.name === "li") {
-                if (domNode.children[0].name === "ul") {
-                    return (
-                        <AccordionItem value={`item-${ix}`}>
-                            <AccordionTrigger>{domNode?.data}</AccordionTrigger>
-                            <AccordionContent>
+                const hasInnerList = (el) => el.name === "ul"
+                console.log("éINNNER", domNode?.next)
+                const innerList = domNode?.next?.children?.find(hasInnerList)
+                console.log("INNERLIST", innerList)
+                if (innerList) {
+                    const text = getAnchorText(innerList)
+                    console.log("TEXT", text)
+                    if (innerList) {
+                        return (
+                            <AccordionItem value={`item-${ix}`}>
+                                <AccordionTrigger>
+                                    {domNode?.children[0]?.children[0]?.data}
+                                </AccordionTrigger>
+                                <AccordionContent>
+                                    {innerList.children.map((c) => recurse(c))}
+                                </AccordionContent>
+                            </AccordionItem>
+                        )
+                    } else
+                        return (
+                            <div as={"li"} color="light">
                                 {domNode.children.map((c) => recurse(c))}
-                            </AccordionContent>
-                        </AccordionItem>
-                    )
-                } else
-                    return (
-                        <li as={"li"} color="light">
-                            {domNode.children.map((c) => recurse(c))}
-                        </li>
-                    )
+                            </div>
+                        )
+                }
             } else if (domNode.name === "ul") {
                 if (domNode?.parent?.name === "li") {
                     ix += 1
