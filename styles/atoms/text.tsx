@@ -9,8 +9,8 @@ export const Text = styled("p", {
     color: "$accent12",
     variants: {
         color: {
-            light: { color: "$accent12" },
-            dark: { color: "$accent1" }
+            light: { color: "var(--my-white)" },
+            dark: { color: "var(--my-black)" }
         },
         weight: {
             regular: { fontWeight: 400 },

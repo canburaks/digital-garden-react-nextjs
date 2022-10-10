@@ -4,18 +4,37 @@ import Link from "next/link"
 import { useState, useEffect, useCallback, useMemo, memo } from "react"
 import { useWindowWidth } from "../lib/hooks"
 import { css, styled } from "../styles/stitches.config"
-import { motion } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
+import { AccordionUI } from "./accordion"
+import { use } from "cytoscape"
 
 const name = "[Can Burak Sofyalioglu]"
 export const siteTitle = "Digital Backroom - An Internet Archive"
 
 export function Layout({ children, sidebar }) {
     console.log("sidebar data", sidebar)
-    const [isOpen, setIsOpen] = useState(null)
+    // Permanent Status of sidebar
+    const [isOpen, setIsOpen] = useState(true)
+    const closeSidebar = useCallback(() => setIsOpen(false), [])
+    const openSidebar = useCallback(() => setIsOpen(true), [])
     const toggle = () => setIsOpen(!isOpen)
 
+    // Temporary status of expand (inactive when sidebar is open)
+    const [isExpanded, setIsExpanded] = useState(false)
+    const expand = useCallback(() => setIsExpanded(true), [])
+    const collapse = useCallback(() => setIsExpanded(false), [])
+
+    const onHoverStartHandler = useCallback(
+        () => (isOpen ? null : setIsExpanded(true)),
+        [isOpen]
+    )
+    const onHoverEndHandler = useCallback(
+        () => (isOpen ? null : setIsExpanded(false)),
+        [isOpen]
+    )
+
     const sidebarposition = isOpen ? "0px" : "-250px"
-    //console.log("effect: ", isOpen, sidebarposition)
+    console.log("effect: ", isOpen, isExpanded)
 
     return (
         <div>
@@ -35,33 +54,80 @@ export function Layout({ children, sidebar }) {
                 <meta name="twitter:card" content="summary_large_image" />
             </Head>
             <MainBox id="layout-main">
-                <Sidebar sidebar={sidebar} />
+                <motion.div
+                    onHoverStart={onHoverStartHandler}
+                    onHoverEnd={onHoverEndHandler}
+                >
+                    <Sidebar
+                        sidebar={sidebar}
+                        isOpen={isOpen}
+                        isExpanded={isExpanded}
+                    >
+                        <LeftColumn>
+                            <MenuToggle onClick={toggle} data-ison={isOpen} />
+                        </LeftColumn>
+                        <AnimatePresence>
+                            {(isOpen || (!isOpen && isExpanded)) && (
+                                <motion.div
+                                    className="flex w-full flex-col items-end ml-20 mt-4 px-16"
+                                    exit={{ opacity: 0 }}
+                                >
+                                    <AccordionUI data={sidebar.data} />
+                                    <div
+                                        className="text-light"
+                                        dangerouslySetInnerHTML={{
+                                            __html: sidebar.data,
+                                        }}
+                                    />
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </Sidebar>
+                </motion.div>
                 <ContentBox id="layout-content">{children}</ContentBox>
             </MainBox>
         </div>
     )
 }
-const Sidebar = memo(
-    ({ sidebar }) => (
-        <SidebarBox className="sidebar" id="sidebar">
-            <SidebarInner>
-                <section className="section sidebar">
-                    <div
-                        data-w-id="71d5791f-856a-b6c4-e8ee-0ab2729e1de3"
-                        className="sidebar"
-                    >
-                        <div
-                            dangerouslySetInnerHTML={{
-                                __html: sidebar.data,
-                            }}
-                        />
-                    </div>
-                </section>
-            </SidebarInner>
-        </SidebarBox>
-    ),
-    (prev, next) => true
+const Sidebar = ({ children, isOpen, isExpanded }) => (
+    <SidebarBox
+        className="sidebar"
+        id="sidebar"
+        variants={sidebarVariants}
+        initial="collapsed"
+        animate={isOpen ? "expanded" : isExpanded ? "expanded" : "collapsed"}
+    >
+        {children}
+    </SidebarBox>
 )
+
+const sidebarVariants = {
+    expanded: {
+        maxWidth: "354px",
+    },
+    collapsed: {
+        maxWidth: "54px",
+        transition: {
+            when: "afterChildren",
+            delay: "1s",
+        },
+    },
+}
+const LeftColumn = styled(motion.div, {
+    position: "absolute",
+    left: 0,
+    top: 0,
+    bottom: 0,
+    minWidth: "54px",
+    maxWidth: "54px",
+    display: "flex",
+    paddingTop: "16px",
+    flexDirection: "column",
+    alignItems: "center",
+    height: "100vw",
+    background: "#010101",
+    zIndex: 1,
+})
 
 const MainBox = styled(motion.div, {
     width: "100%",
@@ -75,17 +141,16 @@ const MainBox = styled(motion.div, {
     margin: 0,
 })
 const SidebarBox = styled(motion.div, {
-    position: "relative",
+    position: "fixed",
     width: "100%",
     overflowX: "hidden",
     display: "flex",
+    minWidth: "54px",
+    minHeight: "100vh",
     flexDirection: "column",
     justifyContent: "flex-start",
-    minWidth: "25vw",
-    maxWidth: "25vw",
+    alignItems: "flex-end",
     overflowX: "hidden",
-
-    background: "#111",
     flexGrow: 0,
 })
 const SidebarInner = styled(motion.div, {
@@ -94,14 +159,15 @@ const SidebarInner = styled(motion.div, {
     top: 64,
     right: 0,
     bottom: 0,
-    minWidth: "25vw",
-    maxWidth: "25vw",
     minHeight: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
     zIndex: 2,
     padding: 16,
     marginTop: 32,
     overflow: "hidden",
-    "& > #sidebar": { maxWidth: "100%", padding: 32 },
 })
 
 const ContentBox = styled(motion.div, {
@@ -113,6 +179,35 @@ const ContentBox = styled(motion.div, {
     flexGrow: 1,
     padding: "0",
 })
+
+const MenuToggle = ({ onClick, ...props }) => (
+    <svg
+        onClick={onClick}
+        width={32}
+        height={32}
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        {...props}
+    >
+        <path
+            d="M15 22.75H9C3.57 22.75 1.25 20.43 1.25 15V9C1.25 3.57 3.57 1.25 9 1.25H15C20.43 1.25 22.75 3.57 22.75 9V15C22.75 20.43 20.43 22.75 15 22.75ZM9 2.75C4.39 2.75 2.75 4.39 2.75 9V15C2.75 19.61 4.39 21.25 9 21.25H15C19.61 21.25 21.25 19.61 21.25 15V9C21.25 4.39 19.61 2.75 15 2.75H9Z"
+            fill="#cecece"
+        />
+        <path
+            d="M12 13C11.44 13 11 12.55 11 12C11 11.45 11.45 11 12 11C12.55 11 13 11.45 13 12C13 12.55 12.56 13 12 13Z"
+            fill="#cecece"
+        />
+        <path
+            d="M16 13C15.44 13 15 12.55 15 12C15 11.45 15.45 11 16 11C16.55 11 17 11.45 17 12C17 12.55 16.56 13 16 13Z"
+            fill="#cecece"
+        />
+        <path
+            d="M8 13C7.44 13 7 12.55 7 12C7 11.45 7.45 11 8 11C8.55 11 9 11.45 9 12C9 12.55 8.56 13 8 13Z"
+            fill="#cecece"
+        />
+    </svg>
+)
 
 const Blur = (props) => (
     <svg

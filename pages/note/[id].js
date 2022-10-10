@@ -16,6 +16,7 @@ export default function Home({ note, graphdata, sidebar, ...props }) {
     //console.log("Index Page Props: ", props /* backlinks, filenames*/)
 
     const backlinks = graphdata.filter((g) => g.data.target === note.id)
+    console.log("backlinks", backlinks)
 
     const ref = useRef(null)
     const router = useRouter()
@@ -38,7 +39,7 @@ export default function Home({ note, graphdata, sidebar, ...props }) {
 
     useEffect(() => {
         if (backlinks.length > 0) {
-            const sideBox = document.getElementById("side-graph-box")
+            const sideBox = document.getElementById("graph-box")
             const Backlink = (data) => (
                 <div className="backlink-box">
                     <Link href={data.id === "index" ? "/" : `/note/${data.id}`}>
