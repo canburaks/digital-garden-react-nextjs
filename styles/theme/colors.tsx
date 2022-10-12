@@ -166,6 +166,10 @@ export const lightColors = {
 };
 
 export const Colors = {
+  mydark: "hsla(263, 53%, 30%, 1.0)",
+  myblack: "#1A1B1E",
+  mypurple: "#5A31F4",
+  neongreen: "#E5FF01",
   white: "#fff",
   crimson: "#f76190",
   pink: "#f65cb6",

@@ -7,6 +7,8 @@ import { css, styled } from "../styles/stitches.config"
 import { motion, AnimatePresence } from "framer-motion"
 import { AccordionUI } from "./accordion"
 import { use } from "cytoscape"
+import { DIMENSIONS } from "../settings/dimensions"
+import { useStore } from "../lib/state"
 
 const name = "[Can Burak Sofyalioglu]"
 export const siteTitle = "Digital Backroom - An Internet Archive"
@@ -14,7 +16,8 @@ export const siteTitle = "Digital Backroom - An Internet Archive"
 export function Layout({ children, sidebar }) {
     console.log("sidebar data", sidebar)
     // Permanent Status of sidebar
-    const [isOpen, setIsOpen] = useState(true)
+    const isOpen = useStore((state) => state.sidebarOpen)
+    const setIsOpen = useStore((state) => state.setSidebarOpen)
     const closeSidebar = useCallback(() => setIsOpen(false), [])
     const openSidebar = useCallback(() => setIsOpen(true), [])
     const toggle = () => setIsOpen(!isOpen)
@@ -32,9 +35,12 @@ export function Layout({ children, sidebar }) {
         () => (isOpen ? null : setIsExpanded(false)),
         [isOpen]
     )
+    const ww = useWindowWidth()
 
     const sidebarposition = isOpen ? "0px" : "-250px"
-    console.log("effect: ", isOpen, isExpanded)
+    const offset =
+        (ww - DIMENSIONS.CONTENT_BOX_WIDTH) / 2 + DIMENSIONS.SIDEBAR_WIDTH
+    console.log("effect: ", DIMENSIONS.MAIN_CONTENT_OFFSET)
 
     return (
         <div>
@@ -54,10 +60,7 @@ export function Layout({ children, sidebar }) {
                 <meta name="twitter:card" content="summary_large_image" />
             </Head>
             <MainBox id="layout-main">
-                <motion.div
-                    onHoverStart={onHoverStartHandler}
-                    onHoverEnd={onHoverEndHandler}
-                >
+                <motion.div>
                     <Sidebar
                         sidebar={sidebar}
                         isOpen={isOpen}
@@ -69,25 +72,39 @@ export function Layout({ children, sidebar }) {
                         <AnimatePresence>
                             {(isOpen || (!isOpen && isExpanded)) && (
                                 <motion.div
-                                    className="flex w-full flex-col items-end ml-20 mt-4 px-16"
+                                    className="flex w-full flex-col items-end  mt-4 px-16"
                                     exit={{ opacity: 0 }}
+                                    onHoverStart={onHoverStartHandler}
+                                    onHoverEnd={onHoverEndHandler}
                                 >
                                     <AccordionUI data={sidebar.data} />
-                                    <div
-                                        className="text-light"
-                                        dangerouslySetInnerHTML={{
-                                            __html: sidebar.data,
-                                        }}
-                                    />
                                 </motion.div>
                             )}
                         </AnimatePresence>
                     </Sidebar>
                 </motion.div>
-                <ContentBox id="layout-content">{children}</ContentBox>
+                <ContentBox id="layout-content" isOpen>
+                    <motion.div
+                        style={{ position: "relative", minHeight: "100vh" }}
+                        animate={{ width: isOpen ? offset : 0 }}
+                    ></motion.div>
+                    {children}
+                </ContentBox>
             </MainBox>
         </div>
     )
+}
+
+const contentVariants = {
+    open: {
+        minWidth: DIMENSIONS.MAIN_CONTENT_OFFSET,
+        maxWidth: DIMENSIONS.MAIN_CONTENT_OFFSET,
+        x: DIMENSIONS.MAIN_CONTENT_OFFSET,
+    },
+    closed: {
+        maxWidth: 0,
+        x: 0,
+    },
 }
 const Sidebar = ({ children, isOpen, isExpanded }) => (
     <SidebarBox
@@ -103,10 +120,10 @@ const Sidebar = ({ children, isOpen, isExpanded }) => (
 
 const sidebarVariants = {
     expanded: {
-        maxWidth: "354px",
+        maxWidth: `${DIMENSIONS.SIDEBAR_WIDTH}px`,
     },
     collapsed: {
-        maxWidth: "54px",
+        maxWidth: `${DIMENSIONS.SIDEBAR_LEFT_PANEL_WIDTH}px`,
         transition: {
             when: "afterChildren",
             delay: "1s",
@@ -118,8 +135,8 @@ const LeftColumn = styled(motion.div, {
     left: 0,
     top: 0,
     bottom: 0,
-    minWidth: "54px",
-    maxWidth: "54px",
+    minWidth: `${DIMENSIONS.SIDEBAR_LEFT_PANEL_WIDTH}px`,
+    maxWidth: `${DIMENSIONS.SIDEBAR_LEFT_PANEL_WIDTH}px`,
     display: "flex",
     paddingTop: "16px",
     flexDirection: "column",
@@ -145,13 +162,15 @@ const SidebarBox = styled(motion.div, {
     width: "100%",
     overflowX: "hidden",
     display: "flex",
-    minWidth: "54px",
+    minWidth: `${DIMENSIONS.SIDEBAR_LEFT_PANEL_WIDTH}px`,
+    boxShadow: "4px 0px 8px rgba(0, 0, 0, 0.25)",
     minHeight: "100vh",
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "flex-end",
     overflowX: "hidden",
     flexGrow: 0,
+    zIndex: 1,
 })
 const SidebarInner = styled(motion.div, {
     position: "fixed",
@@ -174,7 +193,7 @@ const ContentBox = styled(motion.div, {
     width: "100%",
     overflowX: "hidden",
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "rowß",
     justifyContent: "flex-start",
     flexGrow: 1,
     padding: "0",
