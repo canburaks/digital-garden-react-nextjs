@@ -7,6 +7,7 @@ import { getSinglePost, getGraphData } from "../lib/post"
 import { Network } from "../components/graph"
 import { css, styled } from "../styles/stitches.config"
 import { motion } from "framer-motion"
+import { DIMENSIONS } from "../settings/dimensions"
 
 export default function Home({
     content,
@@ -52,7 +53,11 @@ export default function Home({
                 )}
             </Head>
             <ContentBox>
-                <InnerContent>
+                <InnerContent
+                    initial="open"
+                    animate={"open"}
+                    variants={variants}
+                >
                     <img src="https://cbsofyalioglu.fra1.digitaloceanspaces.com/cbs/digital-garden.jpg" />
                     <section>
                         <div
@@ -66,6 +71,10 @@ export default function Home({
             </ContentBox>
         </Layout>
     )
+}
+const variants = {
+    open: { opacity: 1, x: DIMENSIONS.MAIN_CONTENT_OFFSET },
+    closed: { opacity: 0, x: 0 },
 }
 
 const ContentBox = styled(motion.div, {

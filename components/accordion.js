@@ -20,8 +20,9 @@ const slideUp = keyframes({
 
 const StyledAccordion = styled(AccordionPrimitive.Root, {
     borderRadius: 6,
-    width: 300,
-    backgroundColor: mauve.mauve6,
+    width: 280,
+
+    backgroundColor: "transparent",
     boxShadow: `0 2px 10px ${blackA.blackA4}`,
 })
 
@@ -43,7 +44,6 @@ const StyledItem = styled(AccordionPrimitive.Item, {
     "&:focus-within": {
         position: "relative",
         zIndex: 1,
-        boxShadow: `0 0 0 2px ${mauve.mauve12}`,
     },
 })
 
@@ -51,12 +51,12 @@ const StyledHeader = styled(AccordionPrimitive.Header, {
     all: "unset",
     display: "flex",
 })
-
-const StyledTrigger = styled(AccordionPrimitive.Trigger, {
+const StyledAnchor = styled("a", {
     all: "unset",
     fontFamily: "inherit",
     backgroundColor: "transparent",
-    padding: "0 20px",
+    padding: "0 32px 0 32px",
+    maxWidth: "100%",
     height: 45,
     flex: 1,
     display: "flex",
@@ -64,18 +64,36 @@ const StyledTrigger = styled(AccordionPrimitive.Trigger, {
     justifyContent: "space-between",
     fontSize: 15,
     lineHeight: 1,
-    color: violet.violet11,
-    boxShadow: `0 1px 0 ${mauve.mauve6}`,
-    '&[data-state="closed"]': { backgroundColor: "white" },
-    '&[data-state="open"]': { backgroundColor: "white" },
-    "&:hover": { backgroundColor: mauve.mauve2 },
+    color: "var(--my-white)",
+    "&:hover": { color: "var(--accent-color)" },
+    cursor: "pointer",
+})
+const StyledTrigger = styled(AccordionPrimitive.Trigger, {
+    all: "unset",
+    fontFamily: "inherit",
+    backgroundColor: "transparent",
+    borderColor: "transparent",
+    padding: "0 32px 0 0px",
+    maxWidth: "100%",
+    height: 45,
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    fontSize: 15,
+    lineHeight: 1,
+    color: "var(--accent-color)",
+    //boxShadow: `0 1px 0 ${mauve.mauve6}`,
+    '&[data-state="closed"]': { backgroundColor: "transparent" },
+    '&[data-state="open"]': { backgroundColor: "transparent" },
+    "&:hover": { color: "var(--accent-color)" },
 })
 
 const StyledContent = styled(AccordionPrimitive.Content, {
     overflow: "hidden",
     fontSize: 15,
-    color: mauve.mauve11,
-    backgroundColor: mauve.mauve2,
+    color: "var(--my-white)",
+    backgroundColor: "transparent",
 
     '&[data-state="open"]': {
         animation: `${slideDown} 300ms cubic-bezier(0.87, 0, 0.13, 1)`,
@@ -86,11 +104,13 @@ const StyledContent = styled(AccordionPrimitive.Content, {
 })
 
 const StyledContentText = styled("div", {
-    padding: "15px 20px",
+    marginLeft: 16,
 })
 
 const StyledChevron = styled(ChevronDownIcon, {
-    color: violet.violet10,
+    color: "#dedede",
+    width: 24,
+    height: 24,
     transition: "transform 300ms cubic-bezier(0.87, 0, 0.13, 1)",
     "[data-state=open] &": { transform: "rotate(180deg)" },
 })
@@ -103,7 +123,7 @@ export const AccordionTrigger = React.forwardRef(
         <StyledHeader>
             <StyledTrigger {...props} ref={forwardedRef}>
                 {children}
-                <StyledChevron aria-hidden />
+                <StyledChevron aria-hidden css={{ color: "#dedede" }} />
             </StyledTrigger>
         </StyledHeader>
     )
@@ -119,27 +139,7 @@ export const AccordionContent = React.forwardRef(
 export const AccordionUI = (props) => {
     function traverse(node, index) {
         var ix = -1
-        function getAnchorText(mynode) {
-            console.log("Searching anchor text")
-            // Brings the innter text of first
-            let text = null
-            if (mynode && mynode.children) {
-                const anchor = mynode?.children?.find((x) => x.name === "a")
-                if (anchor) {
-                    text = anchor?.children[0]?.data
-                    console.log("anchor found", anchor.children[0].data)
-                    return anchor.children[0].data
-                } else {
-                    for (let i = 0; i < mynode.children.length; i++) {
-                        const c = mynode.children[i]
-                        const ch = getAnchorText(c)
-                        if (ch && ch.length) return ch
-                    }
-                }
-            }
-        }
         function recurse(domNode) {
-            console.log("DOMNODE: ", domNode.name)
             if (
                 !domNode.children ||
                 domNode.children.length === 0 ||
@@ -155,44 +155,68 @@ export const AccordionUI = (props) => {
                     )
                 } else return <div>{domNode.data}</div>
             } else if (domNode.name === "li") {
-                const hasInnerList = (el) => el.name === "ul"
-                console.log("éINNNER", domNode?.next)
-                const innerList = domNode?.next?.children?.find(hasInnerList)
-                console.log("INNERLIST", innerList)
-                if (innerList) {
-                    const text = getAnchorText(innerList)
-                    console.log("TEXT", text)
-                    if (innerList) {
-                        return (
-                            <AccordionItem value={`item-${ix}`}>
-                                <AccordionTrigger>
-                                    {domNode?.children[0]?.children[0]?.data}
-                                </AccordionTrigger>
-                                <AccordionContent>
-                                    {innerList.children.map((c) => recurse(c))}
-                                </AccordionContent>
-                            </AccordionItem>
-                        )
-                    } else
-                        return (
-                            <div as={"li"} color="light">
-                                {domNode.children.map((c) => recurse(c))}
-                            </div>
-                        )
-                }
-            } else if (domNode.name === "ul") {
-                if (domNode?.parent?.name === "li") {
-                    ix += 1
-                    console.log("ACCC")
-                    return <ul>{domNode.data}</ul>
-                } else
+                // if sibling children is ul, then this current list item should not be rendered
+                // because it will be rendered in the trigger item
+                const nextChildren = domNode?.next?.next?.children
+                const checkInnerList = (el) => el.name === "ul"
+                const hasInnerList = nextChildren?.some(checkInnerList)
+                if (hasInnerList) {
+                    return <></>
+                } else if (domNode.children[0].name === "ul") {
                     return (
-                        <ul>
+                        <div>
                             {domNode.children.map((childNode) => {
                                 return recurse(childNode)
                             })}
-                        </ul>
+                        </div>
                     )
+                } else
+                    return (
+                        <div
+                            className="transition-colors duration-300 ease-linear"
+                            color="light"
+                        >
+                            {domNode.children.map((c) => recurse(c))}
+                        </div>
+                    )
+            } else if (domNode.name === "ul") {
+                if (domNode?.parent?.name === "li") {
+                    ix += 1
+                    const triggerAnchor =
+                        domNode?.parent?.prev?.prev?.children[0]
+                    const triggerTitle = triggerAnchor?.children[0].data
+                    return (
+                        <AccordionItem value={`item-${ix}`}>
+                            <AccordionTrigger>
+                                <span>
+                                    <Link href={triggerAnchor?.attribs?.href}>
+                                        <StyledAnchor>
+                                            {triggerTitle}
+                                        </StyledAnchor>
+                                    </Link>
+                                </span>
+                            </AccordionTrigger>
+                            <AccordionContent>
+                                {domNode.children.map((c) => recurse(c))}
+                            </AccordionContent>
+                        </AccordionItem>
+                    )
+                } else
+                    return (
+                        <>
+                            {domNode.children.map((childNode) => {
+                                return recurse(childNode)
+                            })}
+                        </>
+                    )
+            } else if (domNode.name === "a") {
+                return (
+                    <Link href={domNode.attribs.href}>
+                        <StyledAnchor className="anchor">
+                            {domNode.children[0].data}
+                        </StyledAnchor>
+                    </Link>
+                )
             } else {
                 return (
                     <Text as={"h3"} color="light">
@@ -237,7 +261,7 @@ export const AccordionUI = (props) => {
             type="single"
             defaultValue="item-0"
             collapsible
-            css={{ marginRight: -100 }}
+            css={{ marginRight: -70 }}
         >
             {parsed[1]}
         </Accordion>

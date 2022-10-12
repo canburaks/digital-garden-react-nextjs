@@ -41,7 +41,8 @@
     "rolly.js": "^0.4.0",
     "to-vfile": "^6.1.0",
     "unified": "^9.2.0",
-    "vfile-reporter": "^6.0.1"
+    "vfile-reporter": "^6.0.1",
+    "zustand": "^4.1.2"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.12",
