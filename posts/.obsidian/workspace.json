@@ -1,0 +1,196 @@
+{
+  "main": {
+    "id": "6eb16750324040cd",
+    "type": "split",
+    "children": [
+      {
+        "id": "7fa2a545355ec316",
+        "type": "tabs",
+        "dimension": 46.007259528130675,
+        "children": [
+          {
+            "id": "156d0c5a09656a7c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "index.md",
+                "mode": "preview",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "60b6f8b22937b3d4",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "seo/SEO.md",
+                "mode": "preview",
+                "source": false
+              }
+            }
+          },
+          {
+            "id": "ae30b96f77fae740",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {}
+            }
+          }
+        ]
+      },
+      {
+        "id": "e0c5e3d29721d48a",
+        "type": "tabs",
+        "dimension": 53.992740471869325,
+        "children": [
+          {
+            "id": "c3aa2a51c52968a0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "seo/seotips/Publishing Daily Good for Rankings.md",
+                "mode": "preview",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "d9f6ed51bfb2a3a6",
+    "type": "split",
+    "children": [
+      {
+        "id": "9ba85e6bae3ec9f3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "52b7187e736ea647",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "1c9e874d653cde9d",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": true,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "c2d7c340d4b9a2f1",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 229
+  },
+  "right": {
+    "id": "6576f251ebe95476",
+    "type": "split",
+    "children": [
+      {
+        "id": "123c044acaf945c8",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "673e8bbfb11e3c2b",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "index.md",
+                "collapseAll": true,
+                "extraContext": true,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": false
+              }
+            }
+          },
+          {
+            "id": "6ca348cc4fcdceca",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "f60dc3508c5d201d",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "index.md"
+              }
+            }
+          },
+          {
+            "id": "06b1668a29bbd1c2",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "index.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          }
+        ],
+        "currentTab": 2
+      }
+    ],
+    "direction": "horizontal",
+    "width": 316.2668762207031,
+    "collapsed": true
+  },
+  "ribbon": {
+    "mostRecentAction": ""
+  },
+  "active": "156d0c5a09656a7c",
+  "lastOpenFiles": [
+    "sidebar.md",
+    "index.md",
+    "seo/SEO.md",
+    "seo/seotips/Publishing Daily Good for Rankings.md",
+    "seo/seotips.md",
+    "articles-tr/Obsidian.md",
+    "İdeoloji.md",
+    "articles-tr/Articles (TR).md",
+    "articles-tr/Taksim Yemek Yenilebilecek Yerler.md",
+    "Code/CSS/Frost Effect.md"
+  ]
+}

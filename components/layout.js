@@ -35,12 +35,6 @@ export function Layout({ children, sidebar }) {
         () => (isOpen ? null : setIsExpanded(false)),
         [isOpen]
     )
-    const ww = useWindowWidth()
-
-    const sidebarposition = isOpen ? "0px" : "-250px"
-    const offset =
-        (ww - DIMENSIONS.CONTENT_BOX_WIDTH) / 2 + DIMENSIONS.SIDEBAR_WIDTH
-    console.log("effect: ", DIMENSIONS.MAIN_CONTENT_OFFSET)
 
     return (
         <div>
@@ -59,60 +53,57 @@ export function Layout({ children, sidebar }) {
                 <meta name="og:title" content={siteTitle} />
                 <meta name="twitter:card" content="summary_large_image" />
             </Head>
-            <MainBox id="layout-main">
-                <motion.div>
-                    <Sidebar
-                        sidebar={sidebar}
-                        isOpen={isOpen}
-                        isExpanded={isExpanded}
+            <MainBox id="layout-main" layout>
+                <Sidebar
+                    layout
+                    sidebar={sidebar}
+                    isOpen={isOpen}
+                    isExpanded={isExpanded}
+                >
+                    <motion.div
+                        className="relative w-full top-0 left-0 bottom-0 min-h-screen max-h-screen"
+                        id="sidebar-overlay"
                     >
                         <LeftColumn>
                             <MenuToggle onClick={toggle} data-ison={isOpen} />
                         </LeftColumn>
-                        <AnimatePresence>
-                            {(isOpen || (!isOpen && isExpanded)) && (
-                                <motion.div
-                                    className="flex w-full flex-col items-end  mt-4 px-16"
-                                    exit={{ opacity: 0 }}
-                                    onHoverStart={onHoverStartHandler}
-                                    onHoverEnd={onHoverEndHandler}
-                                >
-                                    <AccordionUI data={sidebar.data} />
-                                </motion.div>
-                            )}
-                        </AnimatePresence>
-                    </Sidebar>
-                </motion.div>
-                <ContentBox id="layout-content" isOpen>
+
+                        <motion.div
+                            id="sidebar-overlay"
+                            className="relative top-0 left-0 bottom-0 right-0 max-w-[30vw] flex w-full !h-full min-h-screen flex-col items-end px-16"
+                            exit={{ opacity: 0 }}
+                            onHoverStart={onHoverStartHandler}
+                            onHoverEnd={onHoverEndHandler}
+                        >
+                            <AccordionUI data={sidebar.data} />
+                        </motion.div>
+                    </motion.div>
+                </Sidebar>
+                <ContentBox id="layout-content">
                     <motion.div
-                        style={{ position: "relative", minHeight: "100vh" }}
-                        animate={{ width: isOpen ? offset : 0 }}
-                    ></motion.div>
-                    {children}
+                        style={{
+                            width: "100%",
+                            maxWidth: "65ch",
+                            margin: "0 auto",
+                            position: "relative",
+                        }}
+                    >
+                        {children}
+                    </motion.div>
                 </ContentBox>
             </MainBox>
         </div>
     )
 }
 
-const contentVariants = {
-    open: {
-        minWidth: DIMENSIONS.MAIN_CONTENT_OFFSET,
-        maxWidth: DIMENSIONS.MAIN_CONTENT_OFFSET,
-        x: DIMENSIONS.MAIN_CONTENT_OFFSET,
-    },
-    closed: {
-        maxWidth: 0,
-        x: 0,
-    },
-}
 const Sidebar = ({ children, isOpen, isExpanded }) => (
     <SidebarBox
         className="sidebar"
         id="sidebar"
         variants={sidebarVariants}
         initial="collapsed"
-        animate={isOpen ? "expanded" : isExpanded ? "expanded" : "collapsed"}
+        animate={isOpen ? "expanded" : "collapsed"}
+        layout
     >
         {children}
     </SidebarBox>
@@ -120,18 +111,15 @@ const Sidebar = ({ children, isOpen, isExpanded }) => (
 
 const sidebarVariants = {
     expanded: {
-        maxWidth: `${DIMENSIONS.SIDEBAR_WIDTH}px`,
+        width: `${DIMENSIONS.SIDEBAR_WIDTH}px`,
     },
     collapsed: {
-        maxWidth: `${DIMENSIONS.SIDEBAR_LEFT_PANEL_WIDTH}px`,
-        transition: {
-            when: "afterChildren",
-            delay: "1s",
-        },
+        width: `${DIMENSIONS.SIDEBAR_LEFT_PANEL_WIDTH}px`,
     },
 }
+
 const LeftColumn = styled(motion.div, {
-    position: "absolute",
+    position: "fixed",
     left: 0,
     top: 0,
     bottom: 0,
@@ -143,28 +131,36 @@ const LeftColumn = styled(motion.div, {
     alignItems: "center",
     height: "100vw",
     background: "#010101",
-    zIndex: 1,
+    zIndex: 2,
 })
 
 const MainBox = styled(motion.div, {
     width: "100%",
+    maxWidth: "100vw",
     overflowX: "hidden",
     position: "relative",
     display: "flex",
     alignItems: "stretch",
     justifyContent: "flex-start",
     minHeight: "100vh",
+    maxHeight: "100vh",
     padding: 0,
     margin: 0,
 })
 const SidebarBox = styled(motion.div, {
-    position: "fixed",
+    position: "sticky",
+    left: 0,
+    top: 0,
     width: "100%",
     overflowX: "hidden",
     display: "flex",
     minWidth: `${DIMENSIONS.SIDEBAR_LEFT_PANEL_WIDTH}px`,
+
     boxShadow: "4px 0px 8px rgba(0, 0, 0, 0.25)",
     minHeight: "100vh",
+    maxHeight: "100vh",
+    overflowY: "hidden",
+    paddingTop: "0",
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "flex-end",
@@ -172,28 +168,16 @@ const SidebarBox = styled(motion.div, {
     flexGrow: 0,
     zIndex: 1,
 })
-const SidebarInner = styled(motion.div, {
-    position: "fixed",
-    left: 0,
-    top: 64,
-    right: 0,
-    bottom: 0,
-    minHeight: "100%",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "flex-start",
-    alignItems: "flex-end",
-    zIndex: 2,
-    padding: 16,
-    marginTop: 32,
-    overflow: "hidden",
-})
 
 const ContentBox = styled(motion.div, {
     width: "100%",
     overflowX: "hidden",
+    position: "relative",
+    minHeight: "150vh",
     display: "flex",
-    flexDirection: "rowß",
+    flexDirection: "column",
+    alignItems: "center",
+    padding: "0 128px",
     justifyContent: "flex-start",
     flexGrow: 1,
     padding: "0",

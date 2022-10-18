@@ -2,12 +2,15 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useEffect, useRef } from "react"
-import { siteTitle, Layout } from "../../components/layout"
+import { siteTitle } from "../../components/layout"
 import { getPostListData, getSinglePost, getGraphData } from "../../lib/post"
 import { Network } from "../../components/graph"
 import Cytoscape from "cytoscape"
 import { css, styled } from "../../styles/stitches.config"
 import { motion } from "framer-motion"
+import { DIMENSIONS } from "../../settings/dimensions"
+import { Layout } from "../../components/layout"
+import { ArticleLayout } from "../../components/article-layout"
 
 export default function Home({ note, graphdata, sidebar, ...props }) {
     var jsnx = require("jsnetworkx")
@@ -63,7 +66,7 @@ export default function Home({ note, graphdata, sidebar, ...props }) {
                     <meta name="description" content={note.description} />
                 )}
             </Head>
-            <ContentBox>
+            <ArticleLayout>
                 <InnerContent>
                     {/* COVER IMAGE */}
                     {note.cover && <img src={note.cover} />}
@@ -76,7 +79,7 @@ export default function Home({ note, graphdata, sidebar, ...props }) {
                         dangerouslySetInnerHTML={{ __html: note.data }}
                     ></div>
                 </InnerContent>
-            </ContentBox>
+            </ArticleLayout>
             <hr />
             <div id="graph-box" ref={ref}></div>
         </Layout>
@@ -95,7 +98,8 @@ const InnerContent = styled(motion.div, {
     flexDirection: "column",
     marginLeft: "auto",
     marginRight: "auto",
-    width: "65ch",
+    position: "absolute",
+    width: "100%",
     "& a": {
         textDecoration: "underline",
     },

@@ -1,0 +1,12 @@
+/* @font-face {
+  font-family: 'Cormorant';
+  src: url('../fonts/Cormorant-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Cormorant-Medium';
+  src: url('../fonts/Cormorant-Medium.ttf') format('truetype');
+} */
+
+.text-sans {
+    font-family: "General Sans Variable";
+}

@@ -21,6 +21,9 @@ const slideUp = keyframes({
 const StyledAccordion = styled(AccordionPrimitive.Root, {
     borderRadius: 6,
     width: 280,
+    position: "relative",
+
+    top: 64,
 
     backgroundColor: "transparent",
     boxShadow: `0 2px 10px ${blackA.blackA4}`,
@@ -57,15 +60,13 @@ const StyledAnchor = styled("a", {
     backgroundColor: "transparent",
     padding: "0 32px 0 32px",
     maxWidth: "100%",
-    height: 45,
+    height: 36,
     flex: 1,
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
     fontSize: 15,
     lineHeight: 1,
-    color: "var(--my-white)",
-    "&:hover": { color: "var(--accent-color)" },
     cursor: "pointer",
 })
 const StyledTrigger = styled(AccordionPrimitive.Trigger, {
@@ -77,6 +78,7 @@ const StyledTrigger = styled(AccordionPrimitive.Trigger, {
     maxWidth: "100%",
     height: 45,
     flex: 1,
+    cursor: "pointer",
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
@@ -87,6 +89,9 @@ const StyledTrigger = styled(AccordionPrimitive.Trigger, {
     '&[data-state="closed"]': { backgroundColor: "transparent" },
     '&[data-state="open"]': { backgroundColor: "transparent" },
     "&:hover": { color: "var(--accent-color)" },
+    "&:hover svg": {
+        backgroundColor: "rgba(255,255,255, 0.1) !important",
+    },
 })
 
 const StyledContent = styled(AccordionPrimitive.Content, {
@@ -110,6 +115,7 @@ const StyledContentText = styled("div", {
 const StyledChevron = styled(ChevronDownIcon, {
     color: "#dedede",
     width: 24,
+    cursor: "pointer",
     height: 24,
     transition: "transform 300ms cubic-bezier(0.87, 0, 0.13, 1)",
     "[data-state=open] &": { transform: "rotate(180deg)" },
@@ -259,18 +265,19 @@ export const AccordionUI = (props) => {
     return (
         <Accordion
             type="single"
+            className="z-10"
             defaultValue="item-0"
             collapsible
             css={{ marginRight: -70 }}
         >
-            {parsed[1]}
+            <div className="fixed w-[280px]">{parsed[1]}</div>
         </Accordion>
     )
 }
 
 // Your app...
 export const AccordionDemo = () => (
-    <Accordion type="single" defaultValue="item-1" collapsible>
+    <Accordion type="single" defaultValue="item-1" collapsible id="accordion">
         <AccordionItem value="item-1">
             <AccordionTrigger>Is it accessible?</AccordionTrigger>
             <AccordionContent>

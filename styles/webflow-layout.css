@@ -291,7 +291,7 @@ blockquote {
     border-bottom: 2px solid #e93d82;
     background-color: #0b1e25;
 }
-
+/*
 .sidebar {
     position: fixed;
     left: 0px;
@@ -321,6 +321,7 @@ blockquote {
     background-color: #181818;
     color: #eeeeee !important;
 }
+*/
 .sidebar div {
     width: 100%;
     padding: 32px 0;
