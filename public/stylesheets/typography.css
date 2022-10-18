@@ -1,0 +1,68 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+li,
+div {
+  font-style: normal;
+  font-weight: 400;
+  text-indent: 0px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-rendering: geometricPrecision;
+  letter-spacing: -0.03em;
+}
+p,
+span,
+li,
+div {
+  font-family: 'General Sans Variable';
+  font-size: 16px;
+  letter-spacing: 0em;
+}
+
+h1 {
+  font-size: 60px;
+  line-height: 84px;
+}
+
+h2 {
+  font-size: 44px;
+  line-height: 60px;
+}
+
+h3 {
+  font-size: 32px;
+  line-height: 44px;
+}
+
+h4 {
+  font-size: 28px;
+  line-height: 40px;
+}
+h5 {
+  font-size: 24px;
+  line-height: 40px;
+}
+h6 {
+  font-size: 20px;
+  line-height: 40px;
+}
+
+p {
+  line-height: 32px;
+}
+
+li {
+  line-height: 24px;
+}

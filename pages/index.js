@@ -8,6 +8,8 @@ import { Network } from "../components/graph"
 import { css, styled } from "../styles/stitches.config"
 import { motion } from "framer-motion"
 import { DIMENSIONS } from "../settings/dimensions"
+//import Layout from "../../components/app-shell"
+// import Layout from "../components/app-shell"
 
 export default function Home({
     content,
@@ -74,7 +76,7 @@ export default function Home({
 }
 const variants = {
     open: { opacity: 1, x: DIMENSIONS.MAIN_CONTENT_OFFSET },
-    closed: { opacity: 0, x: 0 },
+    closed: { opacity: 1, x: 0 },
 }
 
 const ContentBox = styled(motion.div, {
