@@ -1,3 +1,7 @@
+@import "./tailwind.css";
+@import "./typography.css";
+@import "./fonts.css";
+
 :root {
     --tomato: #f06950;
     --tomato-bg: #471a14;
@@ -190,7 +194,7 @@ a::before {
 /* HOVER UNDERLINE */
 
 div#sidebar {
-    background: url("../public/images/vertical-blob.png");
+    background: url("../images/vertical-blob.png");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: 50% 50%;
@@ -230,7 +234,30 @@ li {
     list-style: none;
 }
 
-.euiResizablePanel.euiResizablePanel--collapsible.euiResizablePanel--first {
+#graph-box {
+    width: 100%;
+    margin-top: 32px;
+    margin-bottom: 64px;
+    min-height: 300px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 2px solid #e93d82;
+    box-shadow: 0 8px 16px 4px rgba(50, 224, 195, 0.247);
+    cursor: grab;
 }
 
-@import "./tailwind.css";
+#side-graph-box {
+    width: 100%;
+    margin-top: 32px;
+    margin-bottom: 64px;
+    /*
+  min-height:250px;
+  */
+    background-color: #29203d;
+    border-radius: 8px;
+    box-shadow: 0 0px 8px 1px rgba(0, 0, 0, 0.3);
+}
+
+#side-graph-box label {
+    margin: 32px 0 !important;
+}

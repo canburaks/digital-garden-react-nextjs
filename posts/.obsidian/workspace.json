@@ -14,7 +14,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "index.md",
+                "file": "seo/seotips/Publishing Daily Good for Rankings.md",
                 "mode": "preview",
                 "source": false
               }
@@ -125,7 +125,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "index.md",
+                "file": "seo/seotips/Publishing Daily Good for Rankings.md",
                 "collapseAll": true,
                 "extraContext": true,
                 "sortOrder": "alphabetical",
@@ -153,7 +153,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "index.md"
+                "file": "seo/seotips/Publishing Daily Good for Rankings.md"
               }
             }
           },
@@ -163,7 +163,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "index.md",
+                "file": "seo/seotips/Publishing Daily Good for Rankings.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -177,15 +177,12 @@
     "width": 316.2668762207031,
     "collapsed": true
   },
-  "ribbon": {
-    "mostRecentAction": ""
-  },
   "active": "156d0c5a09656a7c",
   "lastOpenFiles": [
-    "sidebar.md",
-    "index.md",
     "seo/SEO.md",
     "seo/seotips/Publishing Daily Good for Rankings.md",
+    "index.md",
+    "sidebar.md",
     "seo/seotips.md",
     "articles-tr/Obsidian.md",
     "İdeoloji.md",

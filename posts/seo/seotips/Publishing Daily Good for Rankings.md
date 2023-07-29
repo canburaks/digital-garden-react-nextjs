@@ -9,7 +9,6 @@ date: Sep 7, 2022
 
 ---
 
-# Publishing Daily Good For Rankings?
 This is the question that was asked:
 
 > “Does posting one content daily increase ranking?”
