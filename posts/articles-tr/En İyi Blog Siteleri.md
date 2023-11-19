@@ -11,6 +11,7 @@ Yazının başında ***blog açmak isteyenlere öneriler*** ve dikkat edilmesi
 
 Ayrıca fotoğraf ve illüstrasyon sanatçıları için ayrıca listeye alınan ve dijital ürünlerini satabilecekleri ve foto-blog'larını oluşturabilecekleri bir kaç platform da mevcut.
 
+Yazının İngilizce versiyonu için: [Best Blogging Sites](https://www.cbsofyalioglu.com/blogging/best-blogging-sites/)
 
 
 ### **Ne Tür Blog Platformları İncelenecek?**
